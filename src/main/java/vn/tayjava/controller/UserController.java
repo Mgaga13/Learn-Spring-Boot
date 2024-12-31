@@ -2,6 +2,8 @@ package vn.tayjava.controller;
 
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.tayjava.dto.Request.UserRequestDTO;
@@ -22,10 +22,12 @@ import vn.tayjava.dto.Request.UserRequestDTO;
 @RequestMapping("/user")
 public class UserController {
 
-//  @PostMapping("/")
-  @RequestMapping(path = "/",method = RequestMethod.POST,headers = "apiKey=1.0")
-  public String addUser(@RequestHeader("apiKey") String apiKey,@RequestBody UserRequestDTO user) {
-    System.out.println(apiKey);
+  @PostMapping("/")
+//  @RequestMapping(path = "/",method = RequestMethod.POST,headers = "apiKey=1.0")
+  public String addUser(
+//      @RequestHeader("apiKey") String apiKey,
+      @Valid @RequestBody UserRequestDTO user) {
+//    System.out.println(apiKey);
     return "User added";
   }
 
@@ -36,13 +38,15 @@ public class UserController {
   }
 
   @PatchMapping("/{userId}")
-  public String changeUserStatus(@PathVariable int userId, @RequestParam boolean status) {
+  public String changeUserStatus(
+      @PathVariable @Min(value = 1, message = "userId must be greater than 0") int userId,
+      @RequestParam int status) {
     System.out.println("User changed with id: " + userId + " status: " + status);
     return "User changed status with REST method PATH ";
   }
 
   @DeleteMapping("/{userId}")
-  public String deleteUser(@PathVariable int userId) {
+  public String deleteUser(@Min(1) @PathVariable int userId) {
     return "User deleted";
   }
 
