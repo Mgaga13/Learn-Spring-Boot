@@ -1,8 +1,7 @@
-package vn.tayjava.dto.Request;
+package vn.tayjava.dto;
 
 import static vn.tayjava.util.Gender.FEMALE;
 import static vn.tayjava.util.Gender.MALE;
-import static vn.tayjava.util.Gender.OTHER;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
@@ -13,11 +12,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import org.springframework.format.annotation.DateTimeFormat;
-import vn.tayjava.validator.EnumPattern;
+import vn.tayjava.dto.validator.EnumPattern;
 import vn.tayjava.util.Gender;
-import vn.tayjava.validator.EnumValue;
-import vn.tayjava.validator.GenderSubset;
-import vn.tayjava.validator.PhoneNumber;
+import vn.tayjava.dto.validator.EnumValue;
+import vn.tayjava.dto.validator.GenderSubset;
+import vn.tayjava.dto.validator.PhoneNumber;
 import vn.tayjava.util.UserStatus;
 import vn.tayjava.util.UserType;
 

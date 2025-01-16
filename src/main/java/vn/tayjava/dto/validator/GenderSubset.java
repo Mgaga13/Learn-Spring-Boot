@@ -1,4 +1,4 @@
-package vn.tayjava.validator;
+package vn.tayjava.dto.validator;
 
 
 import static java.lang.annotation.ElementType.FIELD;
