@@ -1,4 +1,4 @@
-package vn.tayjava.util;
+package vn.tayjava.validator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

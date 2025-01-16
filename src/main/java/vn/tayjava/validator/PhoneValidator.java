@@ -1,8 +1,7 @@
-package vn.tayjava.util;
+package vn.tayjava.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import java.lang.annotation.Annotation;
 
 public class PhoneValidator implements ConstraintValidator<PhoneNumber,String> {
 
