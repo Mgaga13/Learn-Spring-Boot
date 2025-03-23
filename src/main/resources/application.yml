@@ -1,11 +1,11 @@
+server:
+  port:8080
 spring:
   application:
-    name: giangnm
+    name: giangnm-java-app
+  profiles:
+#    active: @spring.profiles.active@
+    active: dev
 
-open:
-  api:
-    title: API DOCUMENT
-    version: v1.0.0
-    description: Mota Api service
-    serverUrl: http://localhost:8080
-    serverName: server test
+
+
