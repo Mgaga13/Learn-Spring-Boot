@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: giangnm
+
+open:
+  api:
+    title: API DOCUMENT
+    version: v1.0.0
+    description: Mota Api service
+    serverUrl: http://localhost:8080
+    serverName: server test

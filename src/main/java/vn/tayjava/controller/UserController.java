@@ -3,6 +3,7 @@ package vn.tayjava.controller;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -28,74 +29,47 @@ import vn.tayjava.dto.response.ResponseFailure;
 import vn.tayjava.dto.response.ResponseSuccess;
 
 @RestController
-@Tag(name = "1. User Resource")
 @RequestMapping("/user")
 @Validated
 @Slf4j
+@Tag(name = "User Controller")
 public class UserController {
 
-//  @Operation(summary = "Create user", description = "Create user", responses = {
-//      @ApiResponse(
-//          responseCode = "201",
-//          description = "user added successfully",
-//          content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, examples = @ExampleObject(
-//              name = "ex name",
-//              summary = "ex summary",
-//              value = """
-//                  {
-//                      "status": 201,
-//                      "message": "User added successfully",
-//                      "data": 1
-//                  }
-//                  """
-//          )
-//          )
-//      )
-//  })
-  @PostMapping(path = "/",produces = APPLICATION_JSON_VALUE)
-//  @RequestMapping(path = "/",method = RequestMethod.POST,headers = "apiKey=1.0")
-  public ResponseSuccess addUser(// @RequestHeader("apiKey") String apiKey,
-      @Valid @RequestBody UserRequestDTO user) {
-//    System.out.println("Request add user " + user.getFirstName());
-    log.info("Request to add user: {} {}", user.getFirstName(),user.getLastName());
-    try {
-      return new ResponseSuccess(HttpStatus.CREATED, Translator.toLocale("user.add.success"), 1);
-    } catch (Exception e) {
-      return new ResponseFailure(HttpStatus.BAD_REQUEST, e.getMessage());
-    }
+  @Operation(method = "POST", summary = "Add new user", description = "Send a request via this API to create new user")
+  @PostMapping(value = "/")
+  public ResponseData<Integer> addUser(@Valid @RequestBody UserRequestDTO user) {
+    log.info("Request add user, {} {}", user.getFirstName(), user.getLastName());
+    return new ResponseData<>(HttpStatus.CREATED.value(), Translator.toLocale("user.add.success"), 1);
   }
 
-
+  @Operation(summary = "Update user", description = "Send a request via this API to update user")
   @PutMapping("/{userId}")
-  public ResponseSuccess updateUser(@PathVariable @Min(1) int userId, @Valid @RequestBody UserRequestDTO user) {
-    System.out.println("Request update userId=" + userId);
-
-    try {
-      return new ResponseSuccess(HttpStatus.ACCEPTED, Translator.toLocale("user.upd.success"));
-    } catch (Exception e) {
-      return new ResponseFailure(HttpStatus.BAD_REQUEST, e.getMessage());
-    }
+  public ResponseData<?> updateUser(@PathVariable @Min(1) int userId, @Valid @RequestBody UserRequestDTO user) {
+    log.info("Request update userId={}", userId);
+    return new ResponseData<>(HttpStatus.ACCEPTED.value(), Translator.toLocale("user.upd.success"));
   }
 
+  @Operation(summary = "Change status of user", description = "Send a request via this API to change status of user")
   @PatchMapping("/{userId}")
-  public ResponseSuccess changeUserStatus(
-      @PathVariable @Min(value = 1, message = "userId must be greater than 0") int userId,
-      @RequestParam int status) {
-    System.out.println("User changed with id: " + userId + " status: " + status);
-    return new ResponseSuccess(HttpStatus.ACCEPTED, Translator.toLocale("user.change.success"));
+  public ResponseData<?> updateStatus(@Min(1) @PathVariable int userId, @RequestParam boolean status) {
+    log.info("Request change status, userId={}", userId);
+    return new ResponseData<>(HttpStatus.ACCEPTED.value(), Translator.toLocale("user.change.success"));
   }
 
+  @Operation(summary = "Delete user permanently", description = "Send a request via this API to delete user permanently")
   @DeleteMapping("/{userId}")
   public ResponseSuccess deleteUser(@Min(1) @PathVariable int userId) {
     return new ResponseSuccess(HttpStatus.NO_CONTENT, "User deleted with id: ");
   }
 
+  @Operation(summary = "Get user detail", description = "Send a request via this API to get user information")
   @GetMapping("/{userId}")
   public ResponseSuccess getUser(@PathVariable int userId) {
     return new ResponseSuccess(HttpStatus.OK, "user",
         new UserRequestDTO("Tay", "Java", "admin@tayjava.vn", "0123456789"));
   }
 
+  @Operation(summary = "Get list of users per pageNo", description = "Send a request via this API to get user list by pageNo and pageSize")
   @GetMapping("list")
   @ResponseStatus(HttpStatus.OK)
   public ResponseData<List<UserRequestDTO>> getUsers(@RequestParam(required = false) String email,
