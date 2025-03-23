@@ -1,16 +1,15 @@
 package vn.tayjava.controller;
 
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,7 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import vn.tayjava.dto.UserRequestDTO;
+import vn.tayjava.configuration.Translator;
+import vn.tayjava.dto.request.UserRequestDTO;
 import vn.tayjava.dto.response.ResponseData;
 import vn.tayjava.dto.response.ResponseFailure;
 import vn.tayjava.dto.response.ResponseSuccess;
@@ -30,6 +30,8 @@ import vn.tayjava.dto.response.ResponseSuccess;
 @RestController
 @Tag(name = "1. User Resource")
 @RequestMapping("/user")
+@Validated
+@Slf4j
 public class UserController {
 
 //  @Operation(summary = "Create user", description = "Create user", responses = {
@@ -50,14 +52,14 @@ public class UserController {
 //          )
 //      )
 //  })
-  @PostMapping("/")
+  @PostMapping(path = "/",produces = APPLICATION_JSON_VALUE)
 //  @RequestMapping(path = "/",method = RequestMethod.POST,headers = "apiKey=1.0")
   public ResponseSuccess addUser(// @RequestHeader("apiKey") String apiKey,
       @Valid @RequestBody UserRequestDTO user) {
-    System.out.println("Request add user " + user.getFirstName());
-
+//    System.out.println("Request add user " + user.getFirstName());
+    log.info("Request to add user: {} {}", user.getFirstName(),user.getLastName());
     try {
-      return new ResponseSuccess(HttpStatus.CREATED, "User added successfully", 1);
+      return new ResponseSuccess(HttpStatus.CREATED, Translator.toLocale("user.add.success"), 1);
     } catch (Exception e) {
       return new ResponseFailure(HttpStatus.BAD_REQUEST, e.getMessage());
     }
@@ -69,7 +71,7 @@ public class UserController {
     System.out.println("Request update userId=" + userId);
 
     try {
-      return new ResponseSuccess(HttpStatus.ACCEPTED, "User updated successfully");
+      return new ResponseSuccess(HttpStatus.ACCEPTED, Translator.toLocale("user.upd.success"));
     } catch (Exception e) {
       return new ResponseFailure(HttpStatus.BAD_REQUEST, e.getMessage());
     }
@@ -80,7 +82,7 @@ public class UserController {
       @PathVariable @Min(value = 1, message = "userId must be greater than 0") int userId,
       @RequestParam int status) {
     System.out.println("User changed with id: " + userId + " status: " + status);
-    return new ResponseSuccess(HttpStatus.ACCEPTED, "User changed status with REST method PATH ");
+    return new ResponseSuccess(HttpStatus.ACCEPTED, Translator.toLocale("user.change.success"));
   }
 
   @DeleteMapping("/{userId}")

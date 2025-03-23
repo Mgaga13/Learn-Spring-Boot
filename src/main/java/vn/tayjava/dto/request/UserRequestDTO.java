@@ -1,4 +1,4 @@
-package vn.tayjava.dto;
+package vn.tayjava.dto.request;
 
 import static vn.tayjava.util.Gender.FEMALE;
 import static vn.tayjava.util.Gender.MALE;
